@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apurs.microservices.syllabusesservice.service.SyllabusServiceImpl;
@@ -27,7 +28,13 @@ public class SyllabusRestController {
 	private SyllabusServiceImpl syllabusService;
 	
 	@GetMapping("")
-	public List<SyllabusDTO> getSyllabuses() {
+	public List<SyllabusDTO> getSyllabuses(@RequestParam(required = false) String departmentName, @RequestParam(required = false) String name) {
+		if (departmentName != null)
+			return syllabusService.findAllSyllabusesWhereDepartmentName(departmentName);
+		
+		if (name != null)
+			return syllabusService.findAllByName(name);
+		
 		return syllabusService.findAll();
 	}
 	
